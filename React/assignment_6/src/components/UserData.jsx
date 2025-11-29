@@ -5,23 +5,27 @@ const UserData = () => {
     const[email, setEmail] = useState("");
     const[mobile, setMobile] = useState("");
     const[data, setData] = useState([]);
-    const uniqueId = () => crypto.randomUUID();
+    const[deleted, setDeleted] = useState([]);
 
     const handleAdd = (e) =>{
         
         let obj = {
-            "id" :uniqueId(),
             "name":name,
             "email": email,
             "mobile":mobile
         }
-    setData(data.push(obj))
-    setData([...data]);
+    setData([...data, obj]);
     console.log(data)
 
     setName("");
     setEmail("");
     setMobile("");
+    }
+    const handleDelete = (email)=>{
+        const row = data.find(item => item.email === email);
+        setDeleted([...deleted, row]);
+        setData(data.filter(item=>item.email!=email));
+
     }
     return (
         <div>
@@ -55,18 +59,47 @@ const UserData = () => {
                             <th>Name</th>
                             <th>Email</th>
                             <th>Mobile</th>
+                             <th>Action</th> {/* Add a column for the button */}
                         </tr>
                     </thead>
                     <tbody>
                         {data.map((item)=>(
-                        <tr key = {item.id}>
+                        <tr key = {item.email}>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
                             <td>{item.mobile}</td>
+                            <td>
+                                <button onClick={() => handleDelete(item.email)}>Delete</button>
+                            </td>
                         </tr>
                         ))}
                     </tbody>
                 </table>
+                <h2>Deleted Users</h2>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {deleted.map((item)=>(
+                        <tr key = {item.email}>
+                            <td>{item.name}</td>
+                            <td>{item.email}</td>
+                            <td>{item.mobile}</td>
+                            
+                        </tr>
+
+                        ))}
+                    </tbody>
+                    
+                </table>
+                 {/* <button onClick={() => handleDelete(item.id)}>Delete</button> */}
+            
             
         </div>
     )
